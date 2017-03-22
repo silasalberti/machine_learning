@@ -10,7 +10,21 @@ class NeuralNetwork():
         # We model a single neuron with 3 inputs and 1 output.
         # We assign random weights to a 3x1 matrix with values from -1 to 1 
         # and mean 0
-        self.synaptic_weights = 2 * random.random((3,1)) - 1
+        self.synaptic_weights = self.__layer_weights(3)
+  
+    # Gives weights for a leayer consisting of n nodes.
+    def layer_weights(self, n):
+        layer_weights = []
+        
+        for num in range(n):
+            layer_weights.append(self.__neuron_weights())
+            
+        return layer_weights
+      
+    # Gives 3x1 matrix with values from -1 to 1 and mean 0. To be used as
+    # weights for on neuron.
+    def neuron_weights(self):
+        return 2 * random.random((3,1)) - 1
     
     # The sigmoid function, which describes an S-shaped curve.
     # The weighted sum of the inputs is passed through this function to
