@@ -1,4 +1,5 @@
 # 2 layer neural network
+# Gebaut parallel zum Stream von Siraj "How to Make a Neural Network (LIVE)"
 
 import numpy as np
 import time
