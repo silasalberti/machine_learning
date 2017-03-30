@@ -7,22 +7,23 @@ class NeuralNetwork():
         # every time
         random.seed(1234)
         
-        # We model a single neuron with 3 inputs and 1 output.
-        # We assign random weights to a 3x1 matrix with values from -1 to 1 
-        # and mean 0
-        self.synaptic_weights = self.__layer_weights(3)
+        # 2 layers consisting each of 3 neurons
+        self.synaptic_weights = [self.layer_weights(3),
+                                 self.layer_weights(3)]
   
-    # Gives weights for a leayer consisting of n nodes.
+    # Gives weights for a layer consisting of n nodes.
     def layer_weights(self, n):
+        # Initialize empty array
         layer_weights = []
         
+        # Create one set of weights for eachnode
         for num in range(n):
-            layer_weights.append(self.__neuron_weights())
+            layer_weights.append(self.neuron_weights())
             
         return layer_weights
       
     # Gives 3x1 matrix with values from -1 to 1 and mean 0. To be used as
-    # weights for on neuron.
+    # weights for one neuron.
     def neuron_weights(self):
         return 2 * random.random((3,1)) - 1
     
@@ -35,10 +36,22 @@ class NeuralNetwork():
     def __sigmoid_derivative(self, x):
         return x * (1-x)
     
-    def predict(self, inputs):
-        # Pass input through our neural network (i.e. the single neuron)
-        return self.__sigmoid(dot(inputs,self.synaptic_weights))
-    
+    def predict(self, inputs):        
+        # Pass input through our neural network. First go through each layer:
+        for layer in self.synaptic_weights:
+            # Get the outputs from each of the neurons
+            out = array([self.__sigmoid(dot(inputs,layer[0])),
+                         self.__sigmoid(dot(inputs,layer[1])),
+                         self.__sigmoid(dot(inputs,layer[2]))])
+            
+            # Redirect them to the next layer
+            inputs = out.T
+            
+        # The last "inputs" are summed (or given through a neuron with all
+        # weights = 1) and put through sigmoid
+        return self.__sigmoid(dot(inputs,[1,1,1]))
+            
+    ###### Is still made for a 1 layer 1 neuron network. Doesn't work
     def train(self, training_set_inputs, training_set_outputs, 
               number_of_training_iterations):
         for iteration in range(number_of_training_iterations):
